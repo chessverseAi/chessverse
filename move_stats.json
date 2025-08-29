@@ -1,0 +1,44 @@
+{
+  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -::e2e4": {
+    "total": 850,
+    "white_wins": 450,
+    "black_wins": 300,
+    "draws": 100
+  },
+  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -::d2d4": {
+    "total": 700,
+    "white_wins": 380,
+    "black_wins": 250,
+    "draws": 70
+  },
+  "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -::d7d5": {
+    "total": 600,
+    "white_wins": 300,
+    "black_wins": 250,
+    "draws": 50
+  },
+  "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -::e7e5": {
+    "total": 300,
+    "white_wins": 160,
+    "black_wins": 100,
+    "draws": 40
+  },
+  "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -::f7f5": {
+    "total": 95,
+    "white_wins": 70,
+    "black_wins": 20,
+    "draws": 5
+  },
+  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -::c2c4": {
+    "total": 500,
+    "white_wins": 270,
+    "black_wins": 180,
+    "draws": 50
+  },
+  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -::g1f3": {
+    "total": 650,
+    "white_wins": 350,
+    "black_wins": 220,
+    "draws": 80
+  }
+}
