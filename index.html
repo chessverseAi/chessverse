@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ChessVerse</title>
+  <style>
+    body { font-family: Arial; text-align: center; }
+    .nav { background: #1a1a2e; color: white; padding: 10px; }
+    .nav a { color: #00ffcc; margin: 0 15px; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    {% if username != "Invitado" %}
+      👤 {{ username }} ({{ elo }} ELO) | 
+      <a href="/leaderboard">Ranking</a>
+    {% else %}
+      <a href="/register">Registrarse</a> | 
+      <a href="/login">Entrar</a>
+    {% endif %}
+  </div>
+
+  <h1>♟️ ChessVerse</h1>
+  <p>✅ ¡Funciona! Próximamente: tablero interactivo y temas.</p>
+  <p><a href="/leaderboard">Ver ranking</a></p>
+</body>
+</html>
