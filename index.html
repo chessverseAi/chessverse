@@ -1,26 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>ChessVerse</title>
-  <style>
-    body { font-family: Arial; text-align: center; }
-    .nav { background: #1a1a2e; color: white; padding: 10px; }
-    .nav a { color: #00ffcc; margin: 0 15px; text-decoration: none; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>♟️ ChessVerse</title>
+  <!-- Librerías de ajedrez -->
+  <link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/css/chessboard-1.0.0.min.css">
+  <link rel="stylesheet" href="/static/style.css" />
+  <script src="https://unpkg.com/chess.js@0.10.3/chess.js"></script>
 </head>
 <body>
-  <div class="nav">
-    {% if username != "Invitado" %}
-      👤 {{ username }} ({{ elo }} ELO) | 
-      <a href="/leaderboard">Ranking</a>
-    {% else %}
-      <a href="/register">Registrarse</a> | 
-      <a href="/login">Entrar</a>
-    {% endif %}
+  <h1>♟️ ChessVerse</h1>
+
+  <!-- Panel de usuario -->
+  <div style="margin: 10px;">
+    <span id="user-info">Usuario: <strong>{{ username }}</strong> | ELO: <span id="elo">{{ elo }}</span></span>
+    <button onclick="logout()">Cerrar sesión</button>
   </div>
 
-  <h1>♟️ ChessVerse</h1>
-  <p>✅ ¡Funciona! Próximamente: tablero interactivo y temas.</p>
-  <p><a href="/leaderboard">Ver ranking</a></p>
+  <!-- Selector de tema -->
+  <div style="margin: 10px;">
+    <label>Tema: </label>
+    <select id="theme-select" onchange="changeTheme(this.value)">
+      <option value="standard">Clásico</option>
+      <option value="minecraft">Minecraft</option>
+      <option value="got">Juego de Tronos</option>
+    </select>
+  </div>
+
+  <!-- Tablero -->
+  <div id="board" style="width: 400px; margin: 20px auto;"></div>
+
+  <!-- Feedback visual -->
+  <div id="feedback" style="text-align: center; font-size: 1.2em; margin: 10px; font-weight: bold;"></div>
+
+  <!-- Botones -->
+  <button onclick="resetBoard()">Reiniciar</button>
+
+  <!-- Chessboard.js -->
+  <script src="https://unpkg.com/chessboardjs@1.0.0/chessboard-1.0.0.js"></script>
+  <script src="/static/script.js"></script>
+
+  <script>
+    // Cargar tema guardado
+    document.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem('chessverse-theme') || 'standard';
+      changeTheme(saved);
+      document.getElementById('theme-select').value = saved;
+    });
+
+    function logout() {
+      document.cookie = "session_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+      alert("Sesión cerrada");
+      window.location.href = "/";
+    }
+  </script>
 </body>
 </html>
