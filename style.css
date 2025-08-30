@@ -1,46 +1,43 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #f0f0f0;
-  text-align: center;
-}
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from pydantic import BaseModel
+from database import get_db, User
+import hashlib
 
-#board {
-  border: 6px solid #333;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  transition: transform 0.3s ease;
-}
+router = APIRouter()
 
-/* Efectos de escala */
-.grow .white, .grow .black {
-  transform: scale(1.3) !important;
-  transition: transform 0.3s ease;
-}
+# Almacenar sesiones activas
+active_sessions = {}  # token → username
 
-.shrink .white, .shrink .black {
-  transform: scale(0.8) !important;
-  opacity: 0.7;
-  transition: all 0.3s ease;
-}
+# Modelos
+class UserCreate(BaseModel):
+    username: str
+    password: str
 
-/* Tema Minecraft */
-.theme-minecraft .square-55d63 {
-  background-color: #7CFC00 !important;
-}
-.theme-minecraft .black-3c85d {
-  background-image: url('https://i.imgur.com/5K1jZQg.png') !important;
-}
-.theme-minecraft .white-1e1d7 {
-  background-image: url('https://i.imgur.com/mXcY1fP.png') !important;
-}
+class UserLogin(BaseModel):
+    username: str
+    password: str
 
-/* Tema Juego de Tronos */
-.theme-got .square-55d63 {
-  background: linear-gradient(45deg, #1a1a2e, #16213e);
-}
-.theme-got .black-3c85d {
-  background-image: url('https://i.imgur.com/9XZlY7L.png') !important;
-}
-.theme-got .white-1e1d7 {
-  background-image: url('https://i.imgur.com/5JZzL9N.png') !important;
-}
+# Hash de contraseñas
+def hash_password(password: str) -> str:
+    return hashlib.sha256(password.encode()).hexdigest()
+
+@router.post("/register")
+def register(user: UserCreate, db: Session = Depends(get_db)):
+    if db.query(User).filter(User.username == user.username).first():
+        raise HTTPException(status_code=400, detail="Usuario ya existe")
+    hashed = hash_password(user.password)
+    db_user = User(username=user.username, password_hash=hashed, elo=1200)
+    db.add(db_user)
+    db.commit()
+    return {"message": "Usuario creado"}
+
+@router.post("/login")
+def login(response: Response, user: UserLogin, db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.username == user.username).first()
+    if not db_user or db_user.password_hash != hash_password(user.password):
+        raise HTTPException(status_code=401, detail="Credenciales inválidas")
+    token = hashlib.sha256(f"{user.username}{hash(time.time())}".encode()).hexdigest()
+    active_sessions[token] = user.username
+    response.set_cookie(key="session_token", value=token, httponly=True, max_age=3600)
+    return {"message": "Login exitoso", "username": user.username}
